@@ -41,5 +41,25 @@ namespace CDE1711
             }
         }
 
+        public bool EsConexo() // verifica si el grafo está conectado
+        {
+            if (ady.Count == 0) return true; //si no hay nodos, se considera conexo
+
+            var visitados = new HashSet<string>(); // crea un conjunto para marcar nodos visitados
+            string inicio = new List<string>(ady.Keys)[0]; //toma un nodo arbitrario para comenzar
+
+            DFS(inicio, visitados); //llama a DFS para marcar todos los nodos alcanzables desde inicio
+
+            return visitados.Count == ady.Count; //compara cantidad de visitados con cantidad total de nodos; si son iguales, el grafo es conexo
+        }
+
+        private void DFS(string nodo, HashSet<string> visitados)
+        {
+            visitados.Add(nodo);
+
+            foreach (var (dest, _) in ady[nodo])
+                if (!visitados.Contains(dest))
+                    DFS(dest, visitados);
+        }
     }
 }

@@ -60,7 +60,7 @@ namespace CDE1711
             if (actual.Nombre == nombre)
                 return nivel;
 
-            foreach (var hijo in actual.hijos)
+            foreach (var hijo in actual.Hijos)
             {
                 int n = Nivel(hijo, nombre, nivel + 1);
                 if (n != -1)

@@ -58,8 +58,65 @@ namespace CDE1711
             visitados.Add(nodo);
 
             foreach (var (dest, _) in ady[nodo])
+            {
                 if (!visitados.Contains(dest))
                     DFS(dest, visitados);
+            }
+        }
+
+        //Dijkstra para ruta más corta
+        public List<string> RutaMasCorta(string inicio, string fin)
+        {
+            var dist = new Dictionary<string, int>();
+            var previo = new Dictionary<string, string>();
+            var pq = new SortedSet<(int dist, string nodo)>();
+
+            foreach (var n in ady.Keys)
+                dist[n] = int.MaxValue;
+
+            dist[inicio] = 0;
+            pq.Add((0, inicio));
+
+            while (pq.Count > 0)
+            {
+                var (d, actual) = pq.Min;
+                pq.Remove(pq.Min);
+
+                if (actual == fin)
+                    break;
+
+                foreach (var (vecino, peso) in ady[actual])
+                {
+                    int nuevaDist = d + peso;
+
+                    if (nuevaDist < dist[vecino])
+                    {
+                        pq.RemoveWhere(x => x.nodo == vecino);
+
+                        dist[vecino] = nuevaDist;
+                        previo[vecino] = actual;
+
+                        pq.Add((nuevaDist, vecino));
+                    }
+                }
+
+            }
+            var ruta = new List<string>();
+            string temp = fin;
+
+            while (temp != inicio)
+            {
+                ruta.Add(temp);
+                if (!previo.ContainsKey(temp)) return new List<string>();
+                temp = previo[temp];
+            }
+            ruta.Add(inicio);
+            ruta.Reverse();
+
+            return ruta;
         }
     }
+
+    
+
 }
